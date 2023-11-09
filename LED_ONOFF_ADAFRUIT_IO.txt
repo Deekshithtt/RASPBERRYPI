@@ -1,0 +1,26 @@
+import RPi.GPIO as GPIO
+import time
+from Adafruit_IO import Client,Feed,RequestError,Data
+
+Ada_User = "User name"
+Ada_Key = "client key"
+adaFeedsLed = "feeds name"
+
+adaclient = client(Ada_User,Ada_key)
+adaLED = adaclient.feeds(adaFeedsLed)
+
+LEd = 26
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(false)
+GPIO.setup(LED,GPIO.OUT)
+ledStatus = 0
+while True:
+    led=adaclient.recive(adaFeedsLed) 
+    ledValue = led.value
+    if(ledValue == "ON"):
+        GPIO.output(LED,GPIO.HIGH)
+    elif(ledValue == "OFF"):
+        GPIO.output(LED,GPIO.LOW)
+    else:
+        print("Error in Recived Information")
+        time.sleep(1)
